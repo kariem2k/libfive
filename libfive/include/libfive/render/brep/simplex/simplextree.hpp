@@ -95,7 +95,7 @@ public:
      *  Sets type to FILLED / EMPTY / AMBIGUOUS based on the corner values.
      *  Then, solves for vertex position, populating AtA / AtB / BtB.
      */
-    void evalLeaf(XTreeEvaluator* eval,
+    void evalLeaf(XTreeEvaluator* eval, const SimplexNeighbors<N>& neighbors,
                   const Region<N>& region, std::shared_ptr<Tape> tape,
                   ObjectPool<Leaf>& spare_leafs);
 

@@ -144,7 +144,7 @@ struct Unroller<BaseDimension, ipow(3, BaseDimension)>
 ////////////////////////////////////////////////////////////////////////////////
 
 template <unsigned N>
-void SimplexTree<N>::evalLeaf(XTreeEvaluator* eval,
+void SimplexTree<N>::evalLeaf(XTreeEvaluator* eval, const SimplexNeighbors<N>&,
                               const Region<N>& region, Tape::Handle tape,
                               ObjectPool<Leaf>& spare_leafs)
 {
