@@ -161,7 +161,7 @@ void DCMesher::load(const std::array<const XTree<3>*, 4>& ts)
     }
 }
 
-std::unique_ptr<Mesh> DCMesher::mesh(const Root<XTree<3>, XTree<3>::Leaf>& xtree,
+std::unique_ptr<Mesh> DCMesher::mesh(const Root<XTree<3>>& xtree,
                                  std::atomic_bool& cancel,
                                  ProgressCallback progress_callback)
 {
