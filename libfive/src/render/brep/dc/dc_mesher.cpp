@@ -13,12 +13,12 @@ You can obtain one at http://mozilla.org/MPL/2.0/.
 namespace Kernel {
 
 template <Axis::Axis A>
-void DCMesher::load(const std::array<const XTree<3>*, 4>& ts)
+void DCMesher::load(const std::array<const DCTree<3>*, 4>& ts)
 {
     // Exit immediately if we can prove that there will be no
     // face produced by this edge.
     if (std::any_of(ts.begin(), ts.end(),
-        [](const XTree<3>* t){ return t->type != Interval::AMBIGUOUS; }))
+        [](const DCTree<3>* t){ return t->type != Interval::AMBIGUOUS; }))
     {
         return;
     }
@@ -47,7 +47,7 @@ void DCMesher::load(const std::array<const XTree<3>*, 4>& ts)
      *  among the function arguments.
      */
     const auto index = std::min_element(ts.begin(), ts.end(),
-            [](const XTree<3>* a, const XTree<3>* b)
+            [](const DCTree<3>* a, const DCTree<3>* b)
             { return a->leaf->level < b->leaf->level; }) - ts.begin();
 
     constexpr auto Q = Axis::Q(A);
@@ -73,7 +73,7 @@ void DCMesher::load(const std::array<const XTree<3>*, 4>& ts)
 }
 
 template <Axis::Axis A, bool D>
-void DCMesher::load(const std::array<const XTree<3>*, 4>& ts)
+void DCMesher::load(const std::array<const DCTree<3>*, 4>& ts)
 {
     int es[4];
     {   // Unpack edge vertex pairs into edge indices
@@ -86,7 +86,7 @@ void DCMesher::load(const std::array<const XTree<3>*, 4>& ts)
             {0, A}};
         for (unsigned i=0; i < 4; ++i)
         {
-            es[i] = XTree<3>::mt->e[D ? ev[i].first  : ev[i].second]
+            es[i] = DCTree<3>::mt->e[D ? ev[i].first  : ev[i].second]
                                    [D ? ev[i].second : ev[i].first];
             assert(es[i] != -1);
         }
@@ -102,7 +102,7 @@ void DCMesher::load(const std::array<const XTree<3>*, 4>& ts)
         // potentially non-manifold cell) or the default vertex
         auto vi = ts[i]->leaf->level > 0
             ? 0
-            : XTree<3>::mt->p[ts[i]->leaf->corner_mask][es[i]];
+            : DCTree<3>::mt->p[ts[i]->leaf->corner_mask][es[i]];
         assert(vi != -1);
 
         // Sanity-checking manifoldness of collapsed cells
@@ -173,8 +173,8 @@ void DCMesher::load(const std::array<const XTree<3>*, 4>& ts)
 ////////////////////////////////////////////////////////////////////////////////
 
 // Explicit template instantiation
-template void DCMesher::load<Axis::X>(const std::array<const XTree<3>*, 4>&);
-template void DCMesher::load<Axis::Y>(const std::array<const XTree<3>*, 4>&);
-template void DCMesher::load<Axis::Z>(const std::array<const XTree<3>*, 4>&);
+template void DCMesher::load<Axis::X>(const std::array<const DCTree<3>*, 4>&);
+template void DCMesher::load<Axis::Y>(const std::array<const DCTree<3>*, 4>&);
+template void DCMesher::load<Axis::Z>(const std::array<const DCTree<3>*, 4>&);
 
 }   // namespace Kernel
