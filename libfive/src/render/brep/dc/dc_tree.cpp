@@ -27,10 +27,6 @@ namespace Kernel {
 //  Here's our cutoff value (with a value set in the header)
 template <unsigned N> constexpr double DCTree<N>::EIGENVALUE_CUTOFF;
 
-//  Allocating static var for marching cubes table
-template <unsigned N>
-std::unique_ptr<const Marching::MarchingTable<N>> DCTree<N>::mt;
-
 ////////////////////////////////////////////////////////////////////////////////
 
 template <unsigned N>
@@ -256,7 +252,7 @@ void DCTree<N>::evalLeaf(XTreeEvaluator* eval, const DCNeighbors<N>& neighbors,
     };
 
     // Iterate over manifold patches, storing one vertex per patch
-    const auto& ps = mt->v[this->leaf->corner_mask];
+    const auto& ps = MarchingTable<N>::mt.v[this->leaf->corner_mask];
     while (this->leaf->vertex_count < ps.size() &&
            ps[this->leaf->vertex_count][0].first != -1)
     {
@@ -297,7 +293,7 @@ void DCTree<N>::evalLeaf(XTreeEvaluator* eval, const DCNeighbors<N>& neighbors,
 
                 // Store the edge index associated with this target
                 auto c = ps[this->leaf->vertex_count][edge_count];
-                edges[edge_count] = mt->e[c.first][c.second];
+                edges[edge_count] = MarchingTable<N>::mt.e[c.first][c.second];
 
                 auto compare = neighbors.check(c.first, c.second);
                 // Enable this to turn on sharing of results with neighbors
@@ -835,7 +831,7 @@ std::shared_ptr<IntersectionVec<N>> DCTree<N>::intersection(
 {
     assert(this->leaf != nullptr);
     assert(mt->e[a][b] != -1);
-    return this->leaf->intersections[mt->e[a][b]];
+    return this->leaf->intersections[MarchingTable<N>::mt.e[a][b]];
 }
 
 template <unsigned N>

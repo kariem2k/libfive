@@ -194,10 +194,6 @@ public:
     std::shared_ptr<IntersectionVec<N>> intersection(
             unsigned a, unsigned b) const;
 
-    /*  Single copy of the marching squares / cubes table, lazily
-     *  initialized when needed */
-    static std::unique_ptr<const Marching::MarchingTable<N>> mt;
-
 protected:
     /*
      *  Searches for a vertex within the DCTree cell, using the QEF matrices
